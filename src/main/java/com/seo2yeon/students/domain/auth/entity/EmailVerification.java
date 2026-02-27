@@ -16,7 +16,7 @@ public class EmailVerification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -27,4 +27,14 @@ public class EmailVerification {
 
     private LocalDateTime expiredAt;
     private LocalDateTime createdAt;
+
+    public void verify() {
+        this.verified = true;
+    }
+
+    public void updateCode(String code, LocalDateTime expiredAt) {
+        this.code = code;
+        this.expiredAt = expiredAt;
+        this.verified = false;
+    }
 }
