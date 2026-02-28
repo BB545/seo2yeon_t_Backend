@@ -2,6 +2,7 @@ package com.seo2yeon.students.domain.auth.controller;
 
 import com.seo2yeon.students.domain.auth.dto.EmailSendRequest;
 import com.seo2yeon.students.domain.auth.dto.EmailVerifyRequest;
+import com.seo2yeon.students.domain.auth.dto.LoginRequest;
 import com.seo2yeon.students.domain.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,16 @@ public class AuthController {
     public ResponseEntity<String> verifyEmail(@Valid @RequestBody EmailVerifyRequest request) {
         authService.verifyEmailCode(request.getEmail(), request.getCode());
         return ResponseEntity.ok("이메일 인증 완료");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+
+        String token = authService.login(
+                request.getEmail(),
+                request.getPassword()
+        );
+
+        return ResponseEntity.ok(token);
     }
 }

@@ -16,6 +16,14 @@ public class GlobalExceptionHandler {
                 .body(errorCode.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception e) {
+
+        return ResponseEntity
+                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
+                .body(ErrorCode.INTERNAL_SERVER_ERROR.getMessage());
+    }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleValidationException(
             ConstraintViolationException e

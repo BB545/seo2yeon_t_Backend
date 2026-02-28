@@ -3,6 +3,11 @@ package com.seo2yeon.students.global.exception;
 import org.springframework.http.HttpStatus;
 
 public enum ErrorCode {
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다."),
+
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 사용자입니다."),
+    INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
     TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "인증 요청은 1분에 한 번만 가능합니다."),
     REJOIN_NOT_ALLOWED(HttpStatus.BAD_REQUEST, "탈퇴 후 30일 이내에는 재가입이 불가합니다."),
     EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 가입된 이메일입니다."),
