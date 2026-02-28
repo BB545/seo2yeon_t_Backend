@@ -2,7 +2,7 @@ package com.seo2yeon.students.domain.user.service;
 
 import com.seo2yeon.students.domain.auth.entity.EmailVerification;
 import com.seo2yeon.students.domain.auth.repository.EmailVerificationRepository;
-import com.seo2yeon.students.domain.user.dto.SignupRequest;
+import com.seo2yeon.students.domain.auth.dto.SignupRequest;
 import com.seo2yeon.students.domain.user.entity.User;
 import com.seo2yeon.students.domain.user.repository.UserRepository;
 import com.seo2yeon.students.global.exception.CustomException;

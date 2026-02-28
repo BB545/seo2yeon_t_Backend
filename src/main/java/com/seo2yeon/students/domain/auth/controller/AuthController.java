@@ -4,6 +4,8 @@ import com.seo2yeon.students.domain.auth.dto.EmailSendRequest;
 import com.seo2yeon.students.domain.auth.dto.EmailVerifyRequest;
 import com.seo2yeon.students.domain.auth.dto.LoginRequest;
 import com.seo2yeon.students.domain.auth.service.AuthService;
+import com.seo2yeon.students.domain.auth.dto.SignupRequest;
+import com.seo2yeon.students.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final UserService userService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest request) {
+        userService.signup(request);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+    }
 
     @PostMapping("/email/send")
     public ResponseEntity<String> sendEmail(@Valid @RequestBody EmailSendRequest request) {
