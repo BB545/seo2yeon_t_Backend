@@ -17,8 +17,12 @@ import java.time.LocalDateTime;
 public class AuthService {
     private final EmailVerificationRepository emailVerificationRepository;
 
+    private static final long COOLDOWN_SECONDS = 60;
+
     public void sendVerificationCode(String email) {
         String code = RandomCodeGenerator.generate6DigitCode();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiredAt = now.plusMinutes(3);
 
         EmailVerification verification = emailVerificationRepository.findByEmail(email).orElse(null);
 
@@ -33,11 +37,14 @@ public class AuthService {
 
             emailVerificationRepository.save(verification);
         } else {
-            if (verification.getVerified()) {
-                throw new CustomException(ErrorCode.EMAIL_ALREADY_VERIFIED);
+            if (verification.getCreatedAt()
+                    .plusSeconds(COOLDOWN_SECONDS)
+                    .isAfter(now)) {
+
+                throw new CustomException(ErrorCode.TOO_MANY_REQUESTS);
             }
 
-            verification.updateCode(code, LocalDateTime.now().plusMinutes(3));
+            verification.updateCode(code, expiredAt);
         }
 
         System.out.println("인증코드: " + code);
@@ -47,10 +54,6 @@ public class AuthService {
         EmailVerification verification = emailVerificationRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new CustomException(ErrorCode.EMAIL_NOT_FOUND));
-
-        if (verification.getVerified()) {
-            throw new CustomException(ErrorCode.EMAIL_ALREADY_VERIFIED);
-        }
 
         if (verification.getExpiredAt().isBefore(LocalDateTime.now())) {
             throw new CustomException(ErrorCode.EMAIL_EXPIRED);

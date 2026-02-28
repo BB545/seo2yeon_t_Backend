@@ -35,6 +35,7 @@ public class EmailVerification {
     public void updateCode(String code, LocalDateTime expiredAt) {
         this.code = code;
         this.expiredAt = expiredAt;
+        this.createdAt = LocalDateTime.now();
         this.verified = false;
     }
 }

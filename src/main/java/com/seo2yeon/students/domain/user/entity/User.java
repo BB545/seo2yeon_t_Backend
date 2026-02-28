@@ -31,5 +31,29 @@ public class User {
     private String schoolName;
     private Integer grade;
 
+    @Column(nullable = false)
+    private Boolean deleted;
+
+    private LocalDateTime deletedAt;
     private LocalDateTime createdAt;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+        if (this.deleted == null) {
+            this.deleted = false;
+        }
+    }
+
+    public void softDelete() {
+        this.deleted = true;
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public void restore() {
+        this.deleted = false;
+        this.deletedAt = null;
+    }
 }
