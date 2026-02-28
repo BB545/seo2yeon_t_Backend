@@ -4,6 +4,7 @@ import com.seo2yeon.students.domain.auth.entity.EmailVerification;
 import com.seo2yeon.students.domain.auth.repository.EmailVerificationRepository;
 import com.seo2yeon.students.global.exception.CustomException;
 import com.seo2yeon.students.global.exception.ErrorCode;
+import com.seo2yeon.students.global.mail.EmailService;
 import com.seo2yeon.students.global.util.RandomCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Transactional
 public class AuthService {
     private final EmailVerificationRepository emailVerificationRepository;
+    private final EmailService emailService;
 
     private static final long COOLDOWN_SECONDS = 60;
 
@@ -47,7 +49,7 @@ public class AuthService {
             verification.updateCode(code, expiredAt);
         }
 
-        System.out.println("인증코드: " + code);
+        emailService.sendVerificationEmail(email, code);
     }
 
     public void verifyEmailCode(String email, String inputCode) {
