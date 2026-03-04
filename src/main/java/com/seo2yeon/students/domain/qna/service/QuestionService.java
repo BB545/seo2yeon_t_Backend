@@ -95,6 +95,65 @@ public class QuestionService {
         return new QuestionCreateResponse(savedQuestion.getId());
     }
 
+    @Transactional
+    public QuestionUpdateResponse updateQuestion(Long userId,
+                                                 Long questionId,
+                                                 QuestionUpdateRequest request) {
+        User user = getUserOrThrow(userId);
+
+        Question question = getQuestionOrThrow(questionId);
+
+        if (!question.getUserId().equals(userId)) {
+            throw new CustomException(ErrorCode.FORBIDDEN);
+        }
+
+        question.update(request.getTitle(), request.getContent());
+
+        if (request.getDeleteFileIds() != null) {
+            for (Long fileId : request.getDeleteFileIds()) {
+                QuestionFile questionFile =
+                        questionFileRepository.findByFileId(fileId)
+                                .orElseThrow(() ->
+                                        new CustomException(ErrorCode.FILE_NOT_FOUND));
+
+                questionFileRepository.delete(questionFile);
+            }
+        }
+
+        if (request.getNewFiles() != null) {
+            if (request.getNewFiles().size() > 5) {
+                throw new CustomException(ErrorCode.FILE_COUNT_EXCEEDED);
+            }
+
+            for (MultipartFile file : request.getNewFiles()) {
+                validateFile(file);
+
+                String originName = file.getOriginalFilename();
+                String storedName = UUID.randomUUID() + "_" + originName;
+
+                File savedFile = fileRepository.save(
+                        File.builder()
+                                .originName(originName)
+                                .storedName(storedName)
+                                .filePath("/uploads/" + storedName)
+                                .fileSize(file.getSize())
+                                .mimeType(file.getContentType())
+                                .uploadedBy(userId)
+                                .build()
+                );
+
+                questionFileRepository.save(
+                        QuestionFile.builder()
+                                .questionId(questionId)
+                                .fileId(savedFile.getId())
+                                .build()
+                );
+            }
+        }
+
+        return new QuestionUpdateResponse(questionId);
+    }
+
     public Page<QuestionListResponse> getQuestionListForStudent(Long userId, Pageable pageable) {
         User viewer = getUserOrThrow(userId);
 
