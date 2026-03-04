@@ -17,6 +17,7 @@ public enum ErrorCode {
     EMAIL_EXPIRED(HttpStatus.BAD_REQUEST, "AUTH402", "인증이 만료되었습니다."),
     EMAIL_CODE_MISMATCH(HttpStatus.BAD_REQUEST, "AUTH404", "인증 번호가 일치하지 않습니다."),
     EMAIL_NOT_FOUND(HttpStatus.BAD_REQUEST, "AUTH405", "인증 요청이 없습니다."),
+    ADMIN_PERMISSION_REQUIRED(HttpStatus.FORBIDDEN, "AUTH403", "관리자 권한이 필요합니다."),
 
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER404", "사용자를 찾을 수 없습니다."),
     USER_DELETED(HttpStatus.FORBIDDEN, "USER403", "탈퇴 처리된 사용자입니다."),

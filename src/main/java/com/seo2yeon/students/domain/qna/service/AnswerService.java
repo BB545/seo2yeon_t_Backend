@@ -2,6 +2,7 @@ package com.seo2yeon.students.domain.qna.service;
 
 import com.seo2yeon.students.domain.qna.dto.AnswerCreateRequest;
 import com.seo2yeon.students.domain.qna.dto.AnswerCreateResponse;
+import com.seo2yeon.students.domain.qna.dto.AnswerUpdateRequest;
 import com.seo2yeon.students.domain.qna.entity.Answer;
 import com.seo2yeon.students.domain.qna.entity.Question;
 import com.seo2yeon.students.domain.qna.entity.QuestionStatus;
@@ -51,8 +52,43 @@ public class AnswerService {
         return new AnswerCreateResponse(savedAnswer.getId());
     }
 
-    private User getUserOrThrow(Long userId) {
+    @Transactional
+    public void updateAnswer(Long userId, Long answerId, AnswerUpdateRequest request) {
+        User user = getUserOrThrow(userId);
 
+        if (!user.isAdmin()) {
+            throw new CustomException(ErrorCode.ADMIN_PERMISSION_REQUIRED);
+        }
+
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        answer.updateContent(request.getContent());
+    }
+
+    @Transactional
+    public void deleteAnswer(Long userId, Long answerId) {
+        User user = getUserOrThrow(userId);
+
+        if (!user.isAdmin()) {
+            throw new CustomException(ErrorCode.ADMIN_PERMISSION_REQUIRED);
+        }
+
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ANSWER_NOT_FOUND));
+
+        if (answer.isDeleted()) {
+            throw new CustomException(ErrorCode.ANSWER_NOT_FOUND);
+        }
+
+        Question question = getQuestionOrThrow(answer.getQuestionId());
+
+        answer.softDelete();
+
+        question.updateStatus(QuestionStatus.WAITING);
+    }
+
+    private User getUserOrThrow(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 

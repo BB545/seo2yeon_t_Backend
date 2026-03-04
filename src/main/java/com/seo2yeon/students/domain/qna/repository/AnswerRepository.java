@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
     Optional<Answer> findByQuestionIdAndDeletedAtIsNull(Long questionId);
-
     Optional<Answer> findByIdAndDeletedAtIsNull(Long id);
+    Optional<Answer> findByQuestionId(Long questionId);
 }
