@@ -60,7 +60,6 @@ public class QuestionService {
                 .userId(userId)
                 .title(request.getTitle())
                 .content(request.getContent())
-                .status(QuestionStatus.WAITING)
                 .build();
 
         Question savedQuestion = questionRepository.save(question);
@@ -152,6 +151,21 @@ public class QuestionService {
         }
 
         return new QuestionUpdateResponse(questionId);
+    }
+
+    @Transactional
+    public void deleteQuestion(Long userId, Long questionId) {
+        Question question = getQuestionOrThrow(questionId);
+
+        if (question.isDeleted()) {
+            throw new CustomException(ErrorCode.QUESTION_ALREADY_DELETED);
+        }
+
+        if (!question.getUserId().equals(userId)) {
+            throw new CustomException(ErrorCode.QUESTION_ACCESS_DENIED);
+        }
+
+        question.softDelete();
     }
 
     public Page<QuestionListResponse> getQuestionListForStudent(Long userId, Pageable pageable) {

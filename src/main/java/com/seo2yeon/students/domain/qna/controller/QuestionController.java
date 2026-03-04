@@ -87,4 +87,17 @@ public class QuestionController {
                 result
         );
     }
+
+    @DeleteMapping("/{questionId}")
+    public BaseResponse<String> deleteQuestion(
+            @RequestHeader("userId") Long userId,
+            @PathVariable Long questionId
+    ) {
+        questionService.deleteQuestion(userId, questionId);
+
+        return new BaseResponse<>(
+                SuccessCode.QUESTION_DELETE_SUCCESS,
+                null
+        );
+    }
 }
