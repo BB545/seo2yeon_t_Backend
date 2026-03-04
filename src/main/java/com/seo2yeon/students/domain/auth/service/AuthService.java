@@ -7,6 +7,7 @@ import com.seo2yeon.students.domain.user.repository.UserRepository;
 import com.seo2yeon.students.global.exception.CustomException;
 import com.seo2yeon.students.global.jwt.JwtTokenProvider;
 import com.seo2yeon.students.global.mail.EmailService;
+import com.seo2yeon.students.global.response.ErrorCode;
 import com.seo2yeon.students.global.util.RandomCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
