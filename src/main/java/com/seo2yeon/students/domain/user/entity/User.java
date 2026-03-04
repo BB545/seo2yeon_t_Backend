@@ -37,6 +37,10 @@ public class User {
     private LocalDateTime deletedAt;
     private LocalDateTime createdAt;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+
     @PrePersist
     public void prePersist() {
         if (this.createdAt == null) {
@@ -45,6 +49,20 @@ public class User {
         if (this.deleted == null) {
             this.deleted = false;
         }
+
+        if (this.role == null) {
+            this.role = UserRole.USER;
+        }
+    }
+
+    public boolean isAdmin() {
+        return this.role == UserRole.ADMIN
+                || this.role == UserRole.SUPER_ADMIN
+                || this.role == UserRole.ASSISTANT_ADMIN;
+    }
+
+    public boolean isSuperAdmin() {
+        return this.role == UserRole.SUPER_ADMIN;
     }
 
     public void softDelete() {
