@@ -1,0 +1,17 @@
+package com.seo2yeon.students.domain.file.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.core.io.Resource;
+
+@Getter
+@AllArgsConstructor
+public class FileDownloadResponse {
+    private Resource resource;
+
+    private String fileName;
+
+    private String contentType;
+
+    private boolean image;
+}
