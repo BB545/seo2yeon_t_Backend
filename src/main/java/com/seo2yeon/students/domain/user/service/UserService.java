@@ -6,7 +6,6 @@ import com.seo2yeon.students.domain.auth.dto.SignupRequest;
 import com.seo2yeon.students.domain.user.entity.User;
 import com.seo2yeon.students.domain.user.repository.UserRepository;
 import com.seo2yeon.students.global.exception.CustomException;
-import com.seo2yeon.students.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

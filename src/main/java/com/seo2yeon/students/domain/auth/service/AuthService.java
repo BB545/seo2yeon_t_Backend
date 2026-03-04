@@ -5,7 +5,6 @@ import com.seo2yeon.students.domain.auth.repository.EmailVerificationRepository;
 import com.seo2yeon.students.domain.user.entity.User;
 import com.seo2yeon.students.domain.user.repository.UserRepository;
 import com.seo2yeon.students.global.exception.CustomException;
-import com.seo2yeon.students.global.exception.ErrorCode;
 import com.seo2yeon.students.global.jwt.JwtTokenProvider;
 import com.seo2yeon.students.global.mail.EmailService;
 import com.seo2yeon.students.global.util.RandomCodeGenerator;
