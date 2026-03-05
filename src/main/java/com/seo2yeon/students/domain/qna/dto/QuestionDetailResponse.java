@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -20,6 +21,8 @@ public class QuestionDetailResponse {
     private QuestionStatus status;
 
     private LocalDateTime createdAt;
+
+    private List<QuestionFileResponse> files;
 
     private AnswerResponse answer;
 }

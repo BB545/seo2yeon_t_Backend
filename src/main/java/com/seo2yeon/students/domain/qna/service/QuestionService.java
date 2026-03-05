@@ -255,6 +255,20 @@ public class QuestionService {
             );
         }
 
+        List<QuestionFileResponse> files = questionFileRepository.findByQuestionId(questionId)
+                .stream()
+                .map(qf -> {
+                    File file = fileRepository.findById(qf.getFileId())
+                            .orElseThrow(() -> new CustomException(ErrorCode.FILE_NOT_FOUND));
+
+                    return new QuestionFileResponse(
+                            file.getId(),
+                            file.getOriginName(),
+                            file.getFilePath()
+                    );
+                })
+                .toList();
+
         return new QuestionDetailResponse(
                 question.getId(),
                 question.getTitle(),
@@ -262,6 +276,7 @@ public class QuestionService {
                 writer.getName(),
                 question.getStatus(),
                 question.getCreatedAt(),
+                files,
                 answerResponse
         );
     }
